@@ -1,0 +1,5 @@
+#The prefix you use to create a sign
+prefix: '[ss]'
+
+#Date format, more information at http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html 
+date-format: 'MM/dd HHaa'

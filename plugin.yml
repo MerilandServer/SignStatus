@@ -1,0 +1,9 @@
+name: SignStatus
+version: 0.1
+
+main: com.syteck.signstatus.SignStatus
+
+commands:
+  signstatus:
+    description: Reload the config.
+    usage: /signstatus
