@@ -51,7 +51,7 @@ public class Storage {
 
 		YamlConfiguration yaml = getStorageYaml();
 
-		for(String str: yaml.getKeys(true)) {
+		for(String str: yaml.getKeys(false)) {
 
 			String id = yaml.getString(str+".id");
 			List<String> list = yaml.getStringList(str+".list");
