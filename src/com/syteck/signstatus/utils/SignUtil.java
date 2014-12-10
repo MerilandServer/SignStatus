@@ -20,9 +20,9 @@ public class SignUtil {
 
 	public static boolean canBreak(Block block) {
 
-		if(block != null && block.getType() != Material.AIR) return false;
+		if(block != null && block.getType() != Material.AIR) return true;
 
-		return true;
+		return false;
 	}
 
 	public static void breakSign(Block block) {
