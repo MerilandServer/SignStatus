@@ -10,8 +10,12 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.syteck.signstatus.utils.ConfigUtil;
+import com.syteck.signstatus.utils.UUIDUtil;
 
 public class Storage {
 
@@ -26,6 +30,31 @@ public class Storage {
 
 	private static YamlConfiguration storageYaml;
 	public static YamlConfiguration getStorageYaml() { return storageYaml; }
+
+	private static File configFile;
+	public static File getConfigFile() { return configFile; }
+
+	private static HashMap<Integer, String> online = new HashMap<Integer, String>();
+	private static HashMap<Integer, String> offline = new HashMap<Integer, String>();
+	public static String getOnlineLine(int i) { return online.get(i).replaceAll("&", "§"); }
+	public static String getOfflineLine(int i) { return offline.get(i).replaceAll("&", "§"); }
+
+	public static void addLine(Status status, int i, String message) {
+
+		if(status.equals(Status.ONLINE)) {
+
+			online.put(i, message);
+
+		} else if(status.equals(Status.OFFLINE)) {
+
+			offline.put(i, message);
+
+		} else {
+
+			SignStatus.log("Error customizing lines!");
+
+		}	
+	}
 
 	private static HashMap<String, User> users = new HashMap<String, User>();
 	public static HashMap<String, User> getUsers() { return users; }
@@ -74,6 +103,21 @@ public class Storage {
 
 	public static void saveUser(String id) {
 
+		if(!storageFile.exists()) {
+
+			SignStatus.log("Failed to find storage.yml, creating new one.");
+
+			try {
+
+				storageFile.createNewFile();
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+		}
+
 		YamlConfiguration yaml = getStorageYaml();
 		User user = getUser(id);
 
@@ -101,6 +145,21 @@ public class Storage {
 
 	public static void saveAll() {
 
+		if(!storageFile.exists()) {
+
+			SignStatus.log("Failed to find storage.yml, creating new one.");
+
+			try {
+
+				storageFile.createNewFile();
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+		}
+
 		for(Entry<String, User> entry: getUsers().entrySet()) {
 
 			saveUser(entry.getKey());
@@ -108,16 +167,42 @@ public class Storage {
 		}
 	}
 
-	public static void reload(FileConfiguration config) {
+	public static void updateAll() {
 
-		saveAll();
+		for(Entry<String, User> entry: getUsers().entrySet()) {
 
-		if(config.contains("prefix")) { PREFIX = config.getString("prefix"); }
-		if(config.contains("date-format")) { DATE_FORMAT = new SimpleDateFormat(config.getString("date-format")); }
+			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUIDUtil.fromString(entry.getKey()));
+			User user = entry.getValue();
 
+			if(offlinePlayer.isOnline()) {
+
+				user.setStatus(Status.ONLINE);
+
+			} else {
+
+				user.setStatus(Status.OFFLINE);
+
+			}
+		}
 	}
 
-	public static void setup(File dataFolder, String fileName, FileConfiguration config) {
+	public static void reload() {
+
+		SignStatus main = SignStatus.getInstance();
+
+		saveAll();	
+		main.reloadConfig();
+		updateConfig();
+
+		updateAll();
+	}
+
+	public static void setup(String fileName) {
+
+		File dataFolder = SignStatus.getInstance().getDataFolder();
+
+		configFile = new File(dataFolder, "config.yml");
+		updateConfig();
 
 		storageFile = new File(dataFolder, fileName);
 		storageYaml = YamlConfiguration.loadConfiguration(storageFile);
@@ -136,9 +221,74 @@ public class Storage {
 
 			}
 		}
-
-		if(config.contains("prefix")) { PREFIX = config.getString("prefix"); }
-		if(config.contains("date-format")) { DATE_FORMAT = new SimpleDateFormat(config.getString("date-format")); }
 	}
 
+
+	//TODO Bugs and has to be reloaded 2 times or more for everthing to work normally
+	//Really strange bug though, document here.
+	public static void updateConfig() {
+
+		File configFile = getConfigFile();
+		SignStatus main = SignStatus.getInstance();
+		FileConfiguration config = main.getConfig();
+
+		if(!configFile.exists()) {
+
+			SignStatus.log("Config does not exist, generating new one.");
+			main.saveDefaultConfig();
+
+			config = main.getConfig();
+		}
+
+		if(!ConfigUtil.contains("version", config) || config.getDouble("version") != SignStatus.getVersion()) {
+
+			SignStatus.log("Old config detected, generating new one.");
+
+			configFile.delete();
+			main.saveDefaultConfig();
+
+			config = main.getConfig();
+		}
+
+		if(ConfigUtil.contains("perfix", config)) { PREFIX = config.getString("prefix"); }
+		if(ConfigUtil.contains("date-format", config)) { DATE_FORMAT = new SimpleDateFormat(config.getString("date-format")); }
+
+		if(ConfigUtil.contains("online-sign", config)) {
+
+			String os = "online-sign";
+
+			for(int i = 1; i<=4; i++) {
+
+				addLine(Status.ONLINE, i, config.getString(os+"."+i));
+
+			}
+
+		} else {
+
+			addLine(Status.ONLINE, 1, "&a%name%");
+			addLine(Status.ONLINE, 2, "&aonline");
+			addLine(Status.ONLINE, 3, "");
+			addLine(Status.ONLINE, 4, "");
+
+		}
+
+		if(ConfigUtil.contains("offline-sign", config)) {
+
+			String os = "offline-sign";
+
+			for(int i = 1; i<=4; i++) {
+
+				addLine(Status.OFFLINE, i, config.getString(os+"."+i));
+
+			}
+
+		} else {
+
+			addLine(Status.OFFLINE, 1, "&c%name%");
+			addLine(Status.OFFLINE, 2, "&coffline");
+			addLine(Status.OFFLINE, 3, "&csince");
+			addLine(Status.OFFLINE, 4, "&c%date%");
+
+		}
+	}
 }

@@ -17,6 +17,12 @@ public class SignStatus extends JavaPlugin {
 	public static Logger logger;
 	public static void log(String str) { logger.log(Level.INFO, str); }
 
+	private static final double VERSION = 1.3;
+	public static double getVersion() { return VERSION; }
+
+	private static SignStatus i;
+	public static SignStatus getInstance() { return i; }
+
 	@Override
 	public void onDisable() {
 
@@ -27,10 +33,11 @@ public class SignStatus extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
+		i = this;
+
 		logger = this.getLogger();
 
-		this.saveDefaultConfig();
-		Storage.setup(this.getDataFolder(), "storage.yml", this.getConfig());
+		Storage.setup("storage.yml");
 		Storage.load();
 
 		Bukkit.getPluginManager().registerEvents(new Events(), this);
@@ -50,20 +57,18 @@ public class SignStatus extends JavaPlugin {
 
 				if(sender instanceof Player) {
 
-					sender.sendMessage(ChatColor.GREEN+"You saved the signs and reloaded the configs.");
+					sender.sendMessage(ChatColor.GREEN+"You saved the signs and reloaded the config.");
 
 				} else {
 
-					log("You saved the signs and reloaded the configs.");
+					log("You saved the signs and reloaded the config.");
 
 				}
 
-				Storage.reload(this.getConfig());
+				Storage.reload();
 			}
 		}
 
 		return true;
 	}
-
-
 }

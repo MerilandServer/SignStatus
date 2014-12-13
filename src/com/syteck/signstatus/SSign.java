@@ -1,7 +1,5 @@
 package com.syteck.signstatus;
 
-import java.util.Date;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -36,24 +34,22 @@ public class SSign {
 
 		if(status.equals(Status.ONLINE)) {
 
-			sign.setLine(0, ChatColor.GREEN+name);
-			sign.setLine(1, ChatColor.GREEN+"online");
-			sign.setLine(2, "");
-			sign.setLine(3, "");
+			sign.setLine(0, SignUtil.process(Storage.getOnlineLine(1), name));
+			sign.setLine(1, SignUtil.process(Storage.getOnlineLine(2), name));
+			sign.setLine(2, SignUtil.process(Storage.getOnlineLine(3), name));
+			sign.setLine(3, SignUtil.process(Storage.getOnlineLine(4), name));
 
 		} else if(status.equals(Status.OFFLINE)) {
 
-			String date = Storage.getDateFormat().format(new Date());
-
-			sign.setLine(0, ChatColor.RED+name);
-			sign.setLine(1, ChatColor.RED+"offline");
-			sign.setLine(2, ChatColor.RED+"since");
-			sign.setLine(3, ChatColor.RED+date);
+			sign.setLine(0, SignUtil.process(Storage.getOfflineLine(1), name));
+			sign.setLine(1, SignUtil.process(Storage.getOfflineLine(2), name));
+			sign.setLine(2, SignUtil.process(Storage.getOfflineLine(3), name));
+			sign.setLine(3, SignUtil.process(Storage.getOfflineLine(4), name));
 
 		} else if(status.equals(Status.UNKNOWN)) {
 
 			sign.setLine(0, ChatColor.RED+name);
-			sign.setLine(1, ChatColor.RED+"unknown");
+			sign.setLine(1, ChatColor.RED+"error");
 			sign.setLine(2, "");
 			sign.setLine(3, "");
 

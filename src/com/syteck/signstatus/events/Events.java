@@ -16,6 +16,7 @@ import com.syteck.signstatus.SSign;
 import com.syteck.signstatus.Status;
 import com.syteck.signstatus.Storage;
 import com.syteck.signstatus.User;
+import com.syteck.signstatus.utils.SignUtil;
 
 public class Events implements Listener {
 
@@ -65,17 +66,17 @@ public class Events implements Listener {
 
 						if(offlinePlayer.isOnline()) {
 
-							event.setLine(0, ChatColor.GREEN+name);
-							event.setLine(1, ChatColor.GREEN+"online");
-							event.setLine(2, "");
-							event.setLine(3, "");
+							event.setLine(0, SignUtil.process(Storage.getOnlineLine(1), name));
+							event.setLine(1, SignUtil.process(Storage.getOnlineLine(2), name));
+							event.setLine(2, SignUtil.process(Storage.getOnlineLine(3), name));
+							event.setLine(3, SignUtil.process(Storage.getOnlineLine(4), name));
 
 						} else {
 
-							event.setLine(0, ChatColor.RED+name);
-							event.setLine(1, ChatColor.RED+"offline");
-							event.setLine(2, ChatColor.RED+"since");
-							event.setLine(3, ChatColor.RED+"unknown");
+							event.setLine(0, SignUtil.process(Storage.getOfflineLine(1), name));
+							event.setLine(1, SignUtil.process(Storage.getOfflineLine(2), name));
+							event.setLine(2, SignUtil.process(Storage.getOfflineLine(3), name));
+							event.setLine(3, SignUtil.process(Storage.getOfflineLine(4), name));
 
 						}
 

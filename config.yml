@@ -1,5 +1,22 @@
+#TOUCH THIS IF YOU WANT A RECKED CONFIG!
+version: 1.3
+
 #The prefix you use to create a sign
 prefix: '[ss]'
 
 #Date format, more information at http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html 
 date-format: 'MM/dd HHaa'
+
+#Configurable online signs, add %name% for name and %date% for date
+online-sign:
+  1: '&a%name%'
+  2: '&aonline'
+  3: ' '
+  4: ' '
+
+#Configurable offline signs, add %name% for name and %date% for date
+offline-sign:
+  1: '&c%name%'
+  2: '&coffline'
+  3: '&csince'
+  4: '&c%date%'

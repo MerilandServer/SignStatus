@@ -1,9 +1,20 @@
 package com.syteck.signstatus.utils;
 
+import java.util.Date;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import com.syteck.signstatus.Storage;
+
 public class SignUtil {
+
+	public static String process(String str, String name) {
+
+		String date = Storage.getDateFormat().format(new Date());
+
+		return str.replaceAll("%date%", date).replaceAll("%name%", name);
+	}
 
 	public static boolean isValid(Block block) {
 
