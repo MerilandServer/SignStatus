@@ -22,7 +22,7 @@ public class Storage {
 	private static String PREFIX = "[ss]";
 	public static String getPrefix() { return PREFIX; }
 
-	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd HHaa");
+	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd hhaa");
 	public static SimpleDateFormat getDateFormat() { return DATE_FORMAT; }
 
 	private static File storageFile;
@@ -234,7 +234,7 @@ public class Storage {
 
 		if(!configFile.exists()) {
 
-			SignStatus.log("Config does not exist, generating new one.");
+			SignStatus.log("Failed to find config.yml, creating new one.");
 			main.saveDefaultConfig();
 
 			config = main.getConfig();
@@ -242,7 +242,7 @@ public class Storage {
 
 		if(!ConfigUtil.contains("version", config) || config.getDouble("version") != SignStatus.getVersion()) {
 
-			SignStatus.log("Old config detected, generating new one.");
+			SignStatus.log("Invalid config detected, creating new one.");
 
 			configFile.delete();
 			main.saveDefaultConfig();
