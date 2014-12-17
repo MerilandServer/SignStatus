@@ -223,9 +223,6 @@ public class Storage {
 		}
 	}
 
-
-	//TODO Bugs and has to be reloaded 2 times or more for everthing to work normally
-	//Really strange bug though, document here.
 	public static void updateConfig() {
 
 		File configFile = getConfigFile();
