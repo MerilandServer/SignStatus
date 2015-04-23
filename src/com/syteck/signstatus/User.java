@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bukkit.Location;
 
+import com.syteck.signstatus.utils.SignUtil;
+
 public class User {
 
 	private String id;
@@ -50,8 +52,16 @@ public class User {
 
 		for(SSign sign: signs) {
 
-			sign.setStatus(status);
+			if(!SignUtil.isValid(sign.getLocation().getBlock())) { 
 
+				this.removeSign(sign.getLocation());
+				SignStatus.log("Sign from user "+id+" was not valid and removed.");
+
+			} else {
+
+				sign.setStatus(status);
+
+			}
 		}	
 	}
 

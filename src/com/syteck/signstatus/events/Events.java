@@ -111,7 +111,7 @@ public class Events implements Listener {
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
 
 		String id = event.getPlayer().getUniqueId().toString();
-
+		
 		if(Storage.getUser(id) != null) {
 
 			User user = Storage.getUser(id);
