@@ -50,11 +50,13 @@ public class User {
 
 	public void setStatus(Status status) {
 
+		ArrayList<Location> locToRemove = new ArrayList<Location>();
+		
 		for(SSign sign: signs) {
 
 			if(!SignUtil.isValid(sign.getLocation().getBlock())) { 
 
-				this.removeSign(sign.getLocation());
+				locToRemove.add(sign.getLocation());
 				SignStatus.log("Sign from user "+id+" was not valid and removed.");
 
 			} else {
@@ -62,7 +64,16 @@ public class User {
 				sign.setStatus(status);
 
 			}
-		}	
+		}
+		
+		for(Location loc: locToRemove) {
+			
+			this.removeSign(loc);
+			
+		}
+		
+		locToRemove.clear();
+		locToRemove = null;
 	}
 
 	public void clean() {

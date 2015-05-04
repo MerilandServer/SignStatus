@@ -19,7 +19,7 @@ import com.syteck.signstatus.User;
 import com.syteck.signstatus.utils.SignUtil;
 
 public class Events implements Listener {
-
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onSignChangeEvent(SignChangeEvent event) {
