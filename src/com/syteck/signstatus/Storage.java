@@ -36,8 +36,8 @@ public class Storage {
 
 	private static HashMap<Integer, String> online = new HashMap<Integer, String>();
 	private static HashMap<Integer, String> offline = new HashMap<Integer, String>();
-	public static String getOnlineLine(int i) { return online.get(i).replaceAll("&", "ง"); }
-	public static String getOfflineLine(int i) { return offline.get(i).replaceAll("&", "ง"); }
+	public static String getOnlineLine(int i) { return online.get(i).replaceAll("&", "ยง"); }
+	public static String getOfflineLine(int i) { return offline.get(i).replaceAll("&", "ยง"); }
 
 	public static void addLine(Status status, int i, String message) {
 
