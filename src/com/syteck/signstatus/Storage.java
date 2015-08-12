@@ -22,7 +22,7 @@ public class Storage {
 	private static String PREFIX = "[ss]";
 	public static String getPrefix() { return PREFIX; }
 
-	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd hhaa");
+	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM HH:mm");
 	public static SimpleDateFormat getDateFormat() { return DATE_FORMAT; }
 
 	private static File storageFile;
@@ -34,8 +34,8 @@ public class Storage {
 	private static File configFile;
 	public static File getConfigFile() { return configFile; }
 
-	private static HashMap<Integer, String> online = new HashMap<Integer, String>();
-	private static HashMap<Integer, String> offline = new HashMap<Integer, String>();
+	private static final HashMap<Integer, String> online = new HashMap<>();
+	private static final HashMap<Integer, String> offline = new HashMap<>();
 	public static String getOnlineLine(int i) { return online.get(i).replaceAll("&", "§"); }
 	public static String getOfflineLine(int i) { return offline.get(i).replaceAll("&", "§"); }
 
@@ -56,7 +56,7 @@ public class Storage {
 		}	
 	}
 
-	private static HashMap<String, User> users = new HashMap<String, User>();
+	private static final HashMap<String, User> users = new HashMap<>();
 	public static HashMap<String, User> getUsers() { return users; }
 	public static User addUser(String id) { User user = new User(id); users.put(id, user); return user; }
 	public static User getUser(String id) { return users.get(id); }
@@ -121,7 +121,7 @@ public class Storage {
 		YamlConfiguration yaml = getStorageYaml();
 		User user = getUser(id);
 
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 
 		for(SSign sign: user.getSignList()) {
 
@@ -263,7 +263,7 @@ public class Storage {
 		} else {
 
 			addLine(Status.ONLINE, 1, "&a%name%");
-			addLine(Status.ONLINE, 2, "&aonline");
+			addLine(Status.ONLINE, 2, "&aEn Línea");
 			addLine(Status.ONLINE, 3, "");
 			addLine(Status.ONLINE, 4, "");
 
@@ -282,8 +282,8 @@ public class Storage {
 		} else {
 
 			addLine(Status.OFFLINE, 1, "&c%name%");
-			addLine(Status.OFFLINE, 2, "&coffline");
-			addLine(Status.OFFLINE, 3, "&csince");
+			addLine(Status.OFFLINE, 2, "&cDesconectado");
+			addLine(Status.OFFLINE, 3, "&cdesde");
 			addLine(Status.OFFLINE, 4, "&c%date%");
 
 		}

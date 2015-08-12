@@ -30,14 +30,14 @@ public class Events implements Listener {
 
 			if(!player.hasPermission("signstatus.create")) {
 
-				player.sendMessage(ChatColor.RED+"You do not have permission to do this.");
+				player.sendMessage(ChatColor.RED+"No tienes permiso.");
 				event.setCancelled(true);
 
 			} else {
 
 				if(event.getLine(1).equalsIgnoreCase("")) {
 
-					player.sendMessage(ChatColor.RED+"You have to specify a player.");
+					player.sendMessage(ChatColor.RED+"Debes especificar un jugador.");
 					event.setCancelled(true);
 
 				} else {
@@ -84,7 +84,7 @@ public class Events implements Listener {
 
 					} else {
 
-						player.sendMessage(ChatColor.RED+"This player is not valid.");
+						player.sendMessage(ChatColor.RED+"Ese jugador no es valido.");
 
 					}
 				}
@@ -103,7 +103,7 @@ public class Events implements Listener {
 			SSign sign = Storage.getSignWithoutUser(location);
 			Storage.getUser(sign.getId()).removeSign(location);
 
-			player.sendMessage(ChatColor.RED+"Sign was removed from database.");
+			player.sendMessage(ChatColor.RED+"SignStatus eliminado.");
 		}
 	}
 

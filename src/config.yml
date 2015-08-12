@@ -5,18 +5,18 @@ version: 1.4
 prefix: '[ss]'
 
 #Date format, more information at http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html 
-date-format: 'MM/dd hhaa'
+date-format: 'dd/MM HH:mm'
 
 #Configurable online signs, add %name% for name and %date% for date
 online-sign:
   1: '&a%name%'
-  2: '&aonline'
+  2: '&aEn línea'
   3: ' '
   4: ' '
 
 #Configurable offline signs, add %name% for name and %date% for date
 offline-sign:
   1: '&c%name%'
-  2: '&coffline'
-  3: '&csince'
+  2: '&cDesconectado'
+  3: '&cdesde'
   4: '&c%date%'

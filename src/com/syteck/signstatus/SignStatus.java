@@ -51,17 +51,17 @@ public class SignStatus extends JavaPlugin {
 
 			if(!sender.hasPermission("signstatus.reload")) {
 
-				sender.sendMessage(ChatColor.RED+"You do not have permission to do this.");
+				sender.sendMessage(ChatColor.RED+"No tienes permiso para hacer esto.");
 
 			} else {
 
 				if(sender instanceof Player) {
 
-					sender.sendMessage(ChatColor.GREEN+"You saved the signs and reloaded the config.");
+					sender.sendMessage(ChatColor.GREEN+"Has guardado las signs y recargado la config.");
 
 				} else {
 
-					log("You saved the signs and reloaded the config.");
+					log("Has guardado las signs y recargado la config..");
 
 				}
 
