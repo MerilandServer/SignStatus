@@ -19,8 +19,8 @@ import com.syteck.signstatus.utils.UUIDUtil;
 
 public class Storage {
 
-	private static String PREFIX = "[ss]";
-	public static String getPrefix() { return PREFIX; }
+	private static String[] PREFIX = new String[] {"[ss]", "[statussigns]"};
+	public static String[] getPrefixes() { return PREFIX; }
 
 	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM HH:mm");
 	public static SimpleDateFormat getDateFormat() { return DATE_FORMAT; }
@@ -247,7 +247,6 @@ public class Storage {
 			config = main.getConfig();
 		}
 
-		if(ConfigUtil.contains("perfix", config)) { PREFIX = config.getString("prefix"); }
 		if(ConfigUtil.contains("date-format", config)) { DATE_FORMAT = new SimpleDateFormat(config.getString("date-format")); }
 
 		if(ConfigUtil.contains("online-sign", config)) {

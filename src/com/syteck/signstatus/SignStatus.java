@@ -17,7 +17,7 @@ public class SignStatus extends JavaPlugin {
 	public static Logger logger;
 	public static void log(String str) { logger.log(Level.INFO, str); }
 
-	private static final double VERSION = 1.4;
+	private static final double VERSION = 1.5;
 	public static double getVersion() { return VERSION; }
 
 	private static SignStatus i;

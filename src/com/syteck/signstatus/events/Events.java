@@ -17,120 +17,93 @@ import com.syteck.signstatus.Status;
 import com.syteck.signstatus.Storage;
 import com.syteck.signstatus.User;
 import com.syteck.signstatus.utils.SignUtil;
+import java.util.Arrays;
 
 public class Events implements Listener {
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onSignChangeEvent(SignChangeEvent event) {
+            Player player = event.getPlayer();
+            if(Arrays.asList(Storage.getPrefixes()).contains(event.getLine(0).toLowerCase())) {
+                if(!player.hasPermission("signstatus.create")) {
+                    player.sendMessage(ChatColor.RED+"No tienes permiso.");
+                    event.setCancelled(true);
+                } else {
+                    OfflinePlayer offlinePlayer;
+                    if (!event.getLine(1).equalsIgnoreCase("") && player.hasPermission("signstatus.createOthers")) {
+                        offlinePlayer = Bukkit.getOfflinePlayer(event.getLine(1));
+                    } else offlinePlayer = player;
+                   
+                    String id = offlinePlayer.getUniqueId().toString();
+                    if (offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
+                        User user;
+                        if (Storage.getUser(id) == null) { 
+                            user = Storage.addUser(id); 
+                        } else {
+                            user = Storage.getUser(id);
+                        }
+                        user.addSign(event.getBlock().getLocation());
+                        Storage.saveUser(id);
 
-		Player player = event.getPlayer();
+                        String name = offlinePlayer.getName();
+                        if (offlinePlayer.isOnline()) {
+                            event.setLine(0, SignUtil.process(Storage.getOnlineLine(1), name));
+                            event.setLine(1, SignUtil.process(Storage.getOnlineLine(2), name));
+                            event.setLine(2, SignUtil.process(Storage.getOnlineLine(3), name));
+                            event.setLine(3, SignUtil.process(Storage.getOnlineLine(4), name));
+                        } else {
+                            event.setLine(0, SignUtil.process(Storage.getOfflineLine(1), name));
+                            event.setLine(1, SignUtil.process(Storage.getOfflineLine(2), name));
+                            event.setLine(2, SignUtil.process(Storage.getOfflineLine(3), name));
+                            event.setLine(3, SignUtil.process(Storage.getOfflineLine(4), name));
+                        }
 
-		if(event.getLine(0).equalsIgnoreCase(Storage.getPrefix())) {
-
-			if(!player.hasPermission("signstatus.create")) {
-
-				player.sendMessage(ChatColor.RED+"No tienes permiso.");
-				event.setCancelled(true);
-
-			} else {
-
-				if(event.getLine(1).equalsIgnoreCase("")) {
-
-					player.sendMessage(ChatColor.RED+"Debes especificar un jugador.");
-					event.setCancelled(true);
-
-				} else {
-
-					OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getLine(1));
-					String id = offlinePlayer.getUniqueId().toString();
-
-					if(offlinePlayer != null && offlinePlayer.hasPlayedBefore()) {
-
-						User user;
-
-						if(Storage.getUser(id) == null) { 
-
-							user = Storage.addUser(id); 
-
-						} else {
-
-							user = Storage.getUser(id);
-
-						}
-
-						user.addSign(event.getBlock().getLocation());
-						Storage.saveUser(id);
-
-						String name = offlinePlayer.getName();
-
-						if(offlinePlayer.isOnline()) {
-
-							event.setLine(0, SignUtil.process(Storage.getOnlineLine(1), name));
-							event.setLine(1, SignUtil.process(Storage.getOnlineLine(2), name));
-							event.setLine(2, SignUtil.process(Storage.getOnlineLine(3), name));
-							event.setLine(3, SignUtil.process(Storage.getOnlineLine(4), name));
-
-						} else {
-
-							event.setLine(0, SignUtil.process(Storage.getOfflineLine(1), name));
-							event.setLine(1, SignUtil.process(Storage.getOfflineLine(2), name));
-							event.setLine(2, SignUtil.process(Storage.getOfflineLine(3), name));
-							event.setLine(3, SignUtil.process(Storage.getOfflineLine(4), name));
-
-						}
-
-						event.getBlock().getState().update();
-
-					} else {
-
-						player.sendMessage(ChatColor.RED+"Ese jugador no es valido.");
-
-					}
-				}
-			}
-		}
+                    event.getBlock().getState().update();
+                    } else {
+                        player.sendMessage(ChatColor.RED+"Ese jugador no es valido.");
+                    }
+                }
+            }
 	}
 
 	@EventHandler
 	public void onBlockBreakEvent(BlockBreakEvent event) {
-
 		Player player = event.getPlayer();
 		Location location = event.getBlock().getLocation();
 
 		if(Storage.getSignWithoutUser(location) != null) {
-
-			SSign sign = Storage.getSignWithoutUser(location);
-			Storage.getUser(sign.getId()).removeSign(location);
-
-			player.sendMessage(ChatColor.RED+"SignStatus eliminado.");
+                    SSign sign = Storage.getSignWithoutUser(location);
+                    SSign sign2 = Storage.getUser(player.getUniqueId().toString()).getSign(location);
+                    if (sign != sign2&& !player.hasPermission("signstatus.deleteOthers")) {
+                        player.sendMessage(ChatColor.RED+"No tienes permiso.");
+                        event.setCancelled(true);
+                        return;
+                    }
+                    
+                    Storage.getUser(sign.getId()).removeSign(location);  
+                    player.sendMessage(ChatColor.RED+"SignStatus eliminado.");
 		}
 	}
 
 	@EventHandler
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-
-		String id = event.getPlayer().getUniqueId().toString();
+            String id = event.getPlayer().getUniqueId().toString();
 		
-		if(Storage.getUser(id) != null) {
-
-			User user = Storage.getUser(id);
-
-			user.setStatus(Status.ONLINE);
-		}
+            if(Storage.getUser(id) != null) {
+                User user = Storage.getUser(id);
+                user.setStatus(Status.ONLINE);
+            }
 	}
 
 	@EventHandler
 	public void onPlayerQuitEvent(PlayerQuitEvent event) {
-
-		String id = event.getPlayer().getUniqueId().toString();
-
-		if(Storage.getUser(id) != null) {
-
-			User user = Storage.getUser(id);
-
-			user.setStatus(Status.OFFLINE);
-		}
+            String id = event.getPlayer().getUniqueId().toString();
+            
+            if(Storage.getUser(id) != null) {
+                User user = Storage.getUser(id);
+                user.setStatus(Status.OFFLINE);
+            }
 	}
 
 }

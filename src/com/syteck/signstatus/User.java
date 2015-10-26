@@ -50,7 +50,7 @@ public class User {
 
 	public void setStatus(Status status) {
 
-		ArrayList<Location> locToRemove = new ArrayList<Location>();
+		ArrayList<Location> locToRemove = new ArrayList<>();
 		
 		for(SSign sign: signs) {
 
